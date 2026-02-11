@@ -76,7 +76,7 @@
 <button id="noBtn">No 😢</button>
 </div>
 <div id="message" class="hidden">
-       🎉 Happy Valentine’s Day Vinnama ❤️❤️❤️❤️❤️
+       🎉🎉🎉 Happy Valentine’s Day My Vinnama ❤️❤️❤️
 </div>
 </div>
 <canvas id="confetti"></canvas>
@@ -99,70 +99,40 @@ yesBtn.addEventListener("click", () => {
 // Simple Confetti
 const canvas = document.getElementById("confetti");
 const ctx = canvas.getContext("2d");
-
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
-
-let particles = [];
-
-function createBlast(x, y) {
-   const particleCount = 150;
-   for (let i = 0; i < particleCount; i++) {
-       // Random angle in radians (0 to 360 degrees)
-       const angle = Math.random() * Math.PI * 2;
-       // Random speed for the "blast" intensity
-       const speed = Math.random() * 8 + 2; 
-       
-       particles.push({
-           x: x,
-           y: y,
-           // Convert angle and speed into X and Y velocity
-           vx: Math.cos(angle) * speed,
-           vy: Math.sin(angle) * speed,
+let confetti = [];
+function startConfetti() {
+   for (let i = 0; i < 150; i++) {
+       confetti.push({
+           x: Math.random() * canvas.width,
+           y: Math.random() * canvas.height - canvas.height,
            r: Math.random() * 6 + 4,
-           color: `hsl(${Math.random() * 360}, 100%, 50%)`,
-           gravity: 0.2, // Pulls particles down over time
-           friction: 0.98, // Slows them down horizontally
-           opacity: 1
+           d: Math.random() * 50,
+           color: "hsl(" + Math.random() * 360 + ",100%,50%)",
+           tilt: Math.floor(Math.random() * 10) - 10
        });
    }
+   draw();
 }
-
 function draw() {
    ctx.clearRect(0, 0, canvas.width, canvas.height);
-   
-   particles.forEach((p, i) => {
-       // Apply physics
-       p.vx *= p.friction;
-       p.vy += p.gravity;
-       p.x += p.vx;
-       p.y += p.vy;
-       p.opacity -= 0.01; // Fade out effect
-
-       // Draw particle
-       ctx.globalAlpha = p.opacity;
+   confetti.forEach((c, i) => {
        ctx.beginPath();
-       ctx.fillStyle = p.color;
-       ctx.fillRect(p.x, p.y, p.r, p.r);
-       ctx.globalAlpha = 1;
-
-       // Remove invisible particles to keep performance high
-       if (p.opacity <= 0) {
-           particles.splice(i, 1);
-       }
+       ctx.fillStyle = c.color;
+       ctx.fillRect(c.x, c.y, c.r, c.r);
    });
-
+   update();
    requestAnimationFrame(draw);
 }
-
-// Start a blast at the center of the screen
-createBlast(canvas.width / 2, canvas.height / 2);
-draw();
-
-// Optional: Blast whenever the user clicks!
-canvas.addEventListener('mousedown', (e) => {
-    createBlast(e.clientX, e.clientY);
-});
+function update() {
+   confetti.forEach((c) => {
+       c.y += 2;
+       if (c.y > canvas.height) {
+           c.y = 0;
+       }
+   });
+}
 </script>
 </body>
 </html>
