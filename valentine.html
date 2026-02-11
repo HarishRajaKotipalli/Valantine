@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Will You Be My Valentine?</title>
+<style>
+   body {
+       margin: 0;
+       padding: 0;
+       font-family: Arial, sans-serif;
+       background: linear-gradient(135deg, #ff4e8b, #ff9a9e);
+       display: flex;
+       justify-content: center;
+       align-items: center;
+       height: 100vh;
+       overflow: hidden;
+       text-align: center;
+       color: white;
+   }
+   .container {
+       position: relative;
+   }
+   h1 {
+       font-size: 2.5rem;
+   }
+   .buttons {
+       margin-top: 30px;
+       position: relative;
+       height: 100px;
+   }
+   button {
+       padding: 12px 25px;
+       font-size: 18px;
+       border: none;
+       border-radius: 30px;
+       cursor: pointer;
+       margin: 10px;
+       transition: 0.3s;
+   }
+   #yesBtn {
+       background: white;
+       color: #ff4e8b;
+       font-weight: bold;
+   }
+   #noBtn {
+       background: #ff1e56;
+       color: white;
+       position: absolute;
+   }
+   canvas {
+       position: fixed;
+       top: 0;
+       left: 0;
+       pointer-events: none;
+   }
+   .hidden {
+       display: none;
+   }
+   #message {
+       font-size: 2rem;
+       margin-top: 20px;
+       animation: fadeIn 2s ease-in-out;
+   }
+   @keyframes fadeIn {
+       from { opacity: 0; transform: scale(0.5); }
+       to { opacity: 1; transform: scale(1); }
+   }
+</style>
+</head>
+<body>
+<div class="container">
+<h1>Will You Be My Valentine? ❤️</h1>
+<div class="buttons">
+<button id="yesBtn">Yes 💖</button>
+<button id="noBtn">No 😢</button>
+</div>
+<div id="message" class="hidden">
+       🎉 Happy Valentine’s Day My Sweetheart ❤️
+</div>
+</div>
+<canvas id="confetti"></canvas>
+<script>
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+const message = document.getElementById("message");
+// Make NO button run away
+noBtn.addEventListener("mouseover", () => {
+   const x = Math.random() * (window.innerWidth - 100);
+   const y = Math.random() * (window.innerHeight - 50);
+   noBtn.style.left = x + "px";
+   noBtn.style.top = y + "px";
+});
+// YES click action
+yesBtn.addEventListener("click", () => {
+   message.classList.remove("hidden");
+   startConfetti();
+});
+// Simple Confetti
+const canvas = document.getElementById("confetti");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+let confetti = [];
+function startConfetti() {
+   for (let i = 0; i < 150; i++) {
+       confetti.push({
+           x: Math.random() * canvas.width,
+           y: Math.random() * canvas.height - canvas.height,
+           r: Math.random() * 6 + 4,
+           d: Math.random() * 50,
+           color: "hsl(" + Math.random() * 360 + ",100%,50%)",
+           tilt: Math.floor(Math.random() * 10) - 10
+       });
+   }
+   draw();
+}
+function draw() {
+   ctx.clearRect(0, 0, canvas.width, canvas.height);
+   confetti.forEach((c, i) => {
+       ctx.beginPath();
+       ctx.fillStyle = c.color;
+       ctx.fillRect(c.x, c.y, c.r, c.r);
+   });
+   update();
+   requestAnimationFrame(draw);
+}
+function update() {
+   confetti.forEach((c) => {
+       c.y += 2;
+       if (c.y > canvas.height) {
+           c.y = 0;
+       }
+   });
+}
+</script>
+</body>
+</html>
